@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:charset_converter/charset_converter.dart';
-import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
@@ -362,58 +362,118 @@ class _MyAppState extends State<MyApp> {
     bytes += generator.reset();
 
     /// Title
-    // bytes += generator.textEncoded(await getEncoded('فاتورة'),
-    //     styles: PosStyles(align: PosAlign.center, bold: true), linesAfter: 1);
-    //
-    // /// Image of logo
-    // bytes = await _logo(bytes, generator);
-    // bytes += generator.textEncoded(await getEncoded('شركة آيزام للتكنولوجيا'),
-    //     styles: PosStyles(align: PosAlign.center, bold: true), linesAfter: 1);
-    //
-    // bytes += generator.textEncoded(
-    //     await getEncoded(
-    //         'Elmasged ElAqsa Mosque street 7 \n smart Village /n Giza'),
-    //     styles: PosStyles(align: PosAlign.center),
-    //     linesAfter: 1);
-    //
-    // bytes += generator.textEncoded(
-    //     await getEncoded('فاتورة إلى: \n  POS Client'),
-    //     styles: PosStyles(align: PosAlign.right),
-    //     linesAfter: 1);
-    //
-    // bytes += generator.textEncoded(
-    //   await getEncoded('رقم الفاتورة:POS10123499949949'),
-    //   styles: PosStyles(align: PosAlign.right),
-    // );
-    // bytes += generator.textEncoded(
-    //   await getEncoded('تاريخ الفاتورة:02/04/2024'),
-    //   styles: PosStyles(align: PosAlign.right),
-    // );
-    // bytes += generator.textEncoded(
-    //   await getEncoded('--------------------------------'),
-    //   styles: PosStyles(align: PosAlign.right),
-    // );
+
+    bytes += generator.textEncoded(await getEncoded('فاتورة'),
+        styles: PosStyles(align: PosAlign.center, bold: true), linesAfter: 1);
+
+    /// Image of logo
+    bytes = await _logo(bytes, generator);
+    bytes += generator.textEncoded(await getEncoded('شركة آيزام للتكنولوجيا'),
+        styles: PosStyles(align: PosAlign.center, bold: true), linesAfter: 1);
+
+    bytes += generator.textEncoded(
+        await getEncoded(
+            'Elmasged ElAqsa Mosque street 7 \n smart Village /n Giza'),
+        styles: PosStyles(align: PosAlign.center),
+        linesAfter: 1);
+
+    bytes += generator.textEncoded(
+        await getEncoded('فاتورة إلى: \n  POS Client'),
+        styles: PosStyles(align: PosAlign.right),
+        linesAfter: 1);
+
+    bytes += generator.textEncoded(
+      await getEncoded('رقم الفاتورة:POS10123499949949'),
+      styles: PosStyles(align: PosAlign.right),
+    );
+    bytes += generator.textEncoded(
+      await getEncoded('تاريخ الفاتورة:02/04/2024'),
+      styles: PosStyles(align: PosAlign.right),
+    );
+    bytes += generator.textEncoded(
+      await getEncoded('--------------------------------'),
+      styles: PosStyles(align: PosAlign.right),
+    );
 
     bytes += generator.hr();
-    bytes += generator.textEncoded(
-      await getEncoded(
-          'العدد  العنصر                                      السعر'),
-      styles: PosStyles(align: PosAlign.right, reverse: true, bold: true),
-    );
 
-    bytes += generator.textEncoded(
-      await getEncoded('1     شيبسي                                  ٢٥ جنيه '),
-      styles: PosStyles(
-        align: PosAlign.right,
+    bytes += generator.row([
+      PosColumn(
+        textEncoded: await getEncoded('العدد'),
+        width: 3,
+        styles: PosStyles(
+          align: PosAlign.center,
+          reverse: true,
+        ),
       ),
-    );
+      PosColumn(
+        textEncoded: await getEncoded('العنصر'),
+        width: 6,
+        styles: PosStyles(
+          align: PosAlign.center,
+          reverse: true,
+        ),
+      ),
+      PosColumn(
+        textEncoded: await getEncoded('السعر'),
+        width: 3,
+        styles: PosStyles(
+          align: PosAlign.center,
+          reverse: true,
+        ),
+      ),
+    ]);
+
+    bytes += generator.row([
+      PosColumn(
+          text: "count",
+          width: 4,
+          styles: PosStyles(bold: true, underline: false)),
+      PosColumn(
+          text: "Name",
+          width: 4,
+          styles: PosStyles(bold: true, underline: false)),
+      PosColumn(
+          text: "Price",
+          width: 4,
+          styles: PosStyles(bold: true, underline: false)),
+    ]);
+
+    bytes += generator.row([
+      PosColumn(text: "1", width: 4),
+      PosColumn(text: "2", width: 4),
+      PosColumn(text: "3", width: 4),
+    ]);
+
+    bytes += generator.row([
+      PosColumn(text: "Product1", width: 4),
+      PosColumn(text: "Product2", width: 4),
+      PosColumn(text: "Product3", width: 4),
+    ]);
 
     // bytes += generator.row([
-    //   PosColumn(text: "R1,Cell 1", width: 6),
-    //   PosColumn(text: "R1,Cell 2", width: 6),
+    //   PosColumn(
+    //     textEncoded: await getEncoded('1'),
+    //     width: 3,
+    //     styles: PosStyles(
+    //       align: PosAlign.center,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     textEncoded: await getEncoded('شيبسي'),
+    //     width: 6,
+    //     styles: PosStyles(
+    //       align: PosAlign.center,
+    //     ),
+    //   ),
+    //   PosColumn(
+    //     textEncoded: await getEncoded('١٥ جنيه'),
+    //     width: 3,
+    //     styles: PosStyles(
+    //       align: PosAlign.center,
+    //     ),
+    //   ),
     // ]);
-
-    bytes += generator.hr();
 
     //QR code
     // bytes += generator.feed(2);
